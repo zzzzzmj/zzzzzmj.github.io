@@ -71,6 +71,211 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-day03" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/03/26/day03/" class="article-date">
+  <time class="dt-published" datetime="2026-03-26T11:32:21.000Z" itemprop="datePublished">2026-03-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2026/03/26/day03/">day03</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="121-买卖股票的最佳时机"><a href="#121-买卖股票的最佳时机" class="headerlink" title="121.买卖股票的最佳时机"></a>121.买卖股票的最佳时机</h2><p><strong>难度</strong></p>
+<p>easy</p>
+<p><strong>题目描述</strong></p>
+<p>给定一个数组 <code>prices</code> ，它的第 <code>i</code> 个元素 <code>prices[i]</code> 表示一支给定股票第 <code>i</code> 天的价格。</p>
+<p>你只能选择 <strong>某一天</strong> 买入这只股票，并选择在 <strong>未来的某一个不同的日子</strong> 卖出该股票。设计一个算法来计算你所能获取的最大利润。</p>
+<p>返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 <code>0</code> 。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入：[7,1,5,3,6,4]</span><br><span class="line">输出：5</span><br><span class="line">解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。</span><br><span class="line">     注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：prices = [7,6,4,3,1]</span><br><span class="line">输出：0</span><br><span class="line">解释：在这种情况下, 没有交易完成, 所以最大利润为 0。</span><br></pre></td></tr></table></figure>
+
+<p><strong>思路</strong></p>
+<p>动归思路：我第一次做这个题想到的是用动态规划来做，创建一个二维数组dp[i] [j]表示第i天买进，第j天卖出的最大利益，然后维护一个全局变量max_profit用于记录全局的最大价值，状态转移方程为：dp[i] [j] &#x3D; max(dp[i] [j-1],prices[j]-prices[i])(买进后每天都有两种选择卖或者不卖，不卖的话获取的利润和前一天的一样，因为没有卖嘛，而且这个状态转移的条件是先买才能卖，所以必须满足i&lt;j).但是最后超时了（两层for循环）</p>
+<p>不用动归的思路：维护两个变量，min_price用于记录当前的最小价格。max_profit用于记录当前的最大利润。我们很容易就可以看出他们之间存在下面的关系：max_profit&#x3D;prices[i]-min_price，因此很容易写出下面的代码。</p>
+<p><strong>复杂度</strong></p>
+<p>时间复杂度：O（nlogn）</p>
+<p>空间复杂度：O（1）</p>
+<p><strong>代码</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class Solution:</span><br><span class="line">    def maxProfit(self, prices: List[int]) -&gt; int:</span><br><span class="line">        n = len(prices)</span><br><span class="line">        max_profit = 0</span><br><span class="line">        min_price = prices[0]</span><br><span class="line">        for price in prices:</span><br><span class="line">            min_price = min(min_price,price)</span><br><span class="line">            max_profit = max(max_profit,price-min_price)</span><br><span class="line">        return max_profit</span><br></pre></td></tr></table></figure>
+
+<h2 id="122-买卖股票的最佳时机II"><a href="#122-买卖股票的最佳时机II" class="headerlink" title="122.买卖股票的最佳时机II"></a>122.买卖股票的最佳时机II</h2><p><strong>难度</strong></p>
+<p>medium</p>
+<p><strong>题目描述</strong></p>
+<p>给你一个整数数组 <code>prices</code> ，其中 <code>prices[i]</code> 表示某支股票第 <code>i</code> 天的价格。</p>
+<p>在每一天，你可以决定是否购买和&#x2F;或出售股票。你在任何时候 <strong>最多</strong> 只能持有 <strong>一股</strong> 股票。然而，你可以在 <strong>同一天</strong> 多次买卖该股票，但要确保你持有的股票不超过一股。</p>
+<p>返回 <em>你能获得的 <strong>最大</strong> 利润</em> 。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入：prices = [7,1,5,3,6,4]</span><br><span class="line">输出：7</span><br><span class="line">解释：在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5 - 1 = 4。</span><br><span class="line">随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6 - 3 = 3。</span><br><span class="line">最大总利润为 4 + 3 = 7 。</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入：prices = [1,2,3,4,5]</span><br><span class="line">输出：4</span><br><span class="line">解释：在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5 - 1 = 4。</span><br><span class="line">最大总利润为 4 。</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 3：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：prices = [7,6,4,3,1]</span><br><span class="line">输出：0</span><br><span class="line">解释：在这种情况下, 交易无法获得正利润，所以不参与交易可以获得最大利润，最大利润为 0。</span><br></pre></td></tr></table></figure>
+
+<p><strong>思路</strong></p>
+<p>从题目举的例子可以发现，但凡是满足后项＞前项的情况，我们就可以用后项-前项得到当前的利润，我们只需再维护一个total_profit累加我们得到的当前利润即是全局最大利润。我是使用了双指针来进行模拟，不过到最后发现slow指针完全可以忽略（用fast-1替代即可）</p>
+<p><strong>复杂度</strong></p>
+<p>时间复杂度：O（n）</p>
+<p>空间复杂度：O（1）</p>
+<p><strong>代码</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">class Solution:</span><br><span class="line">    def maxProfit(self, prices: List[int]) -&gt; int:</span><br><span class="line">        total_profit = 0</span><br><span class="line">        #slow可以省略，完全可以用fast-1替代</span><br><span class="line">        slow = 0</span><br><span class="line">        fast = 1</span><br><span class="line">        n = len(prices)</span><br><span class="line">        while fast &lt; n:</span><br><span class="line">            if prices[fast]&gt;prices[slow]:</span><br><span class="line">                total_profit += prices[fast]-prices[slow]</span><br><span class="line">            slow += 1</span><br><span class="line">            fast += 1</span><br><span class="line">        return total_profit</span><br></pre></td></tr></table></figure>
+
+<h2 id="55-跳跃游戏"><a href="#55-跳跃游戏" class="headerlink" title="55.跳跃游戏"></a>55.跳跃游戏</h2><p><strong>难度</strong></p>
+<p>medium</p>
+<p><strong>题目描述</strong></p>
+<p>给你一个非负整数数组 <code>nums</code> ，你最初位于数组的 <strong>第一个下标</strong> 。数组中的每个元素代表你在该位置可以跳跃的最大长度。</p>
+<p>判断你是否能够到达最后一个下标，如果可以，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [2,3,1,1,4]</span><br><span class="line">输出：true</span><br><span class="line">解释：可以先跳 1 步，从下标 0 到达下标 1, 然后再从下标 1 跳 3 步到达最后一个下标。</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [3,2,1,0,4]</span><br><span class="line">输出：false</span><br><span class="line">解释：无论怎样，总会到达下标为 3 的位置。但该下标的最大跳跃长度是 0 ， 所以永远不可能到达最后一个下标。</span><br></pre></td></tr></table></figure>
+
+<p><strong>思路</strong></p>
+<p>可以采用贪心的思想。我如果当前能够到达的最远的地方&gt;&#x3D;顶点，那么我就可以到达顶点（说了跟没说一样）。维护一个max_reach用于记录当前可到达的最远距离，max_reach&#x3D;max(max_reach,当前位置+当前位置可移动的最大步数)。当然了，这个式子的前提是你需要能够到达当前位置（如果你都到不了当前位置，那你怎么能通过当前位置到达后续更远的地方呢？）即：当前位置&lt;&#x3D;max_reach</p>
+<p><strong>复杂度</strong></p>
+<p>时间复杂度：O（nlogn）</p>
+<p>空间复杂度：O（1）</p>
+<p><strong>代码</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">class Solution:</span><br><span class="line">    def canJump(self, nums: List[int]) -&gt; bool:</span><br><span class="line">        #贪心</span><br><span class="line">        n = len(nums)</span><br><span class="line">        max_reach = 0</span><br><span class="line">        for i in range(n):</span><br><span class="line">            if i &lt;= max_reach:</span><br><span class="line">                max_reach = max(max_reach,nums[i]+i)</span><br><span class="line">                if max_reach &gt;= n-1:</span><br><span class="line">                    return True</span><br><span class="line">        return False</span><br><span class="line">        </span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2026/03/26/day03/" data-id="cuidpPfzLxDdnvjGHQFtTXlXg" data-title="day03" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95-%E5%8A%9B%E6%89%A3%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8150%E9%A2%98/" rel="tag">算法(力扣面试经典150题)</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-day02" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/03/25/day02/" class="article-date">
+  <time class="dt-published" datetime="2026-03-25T12:11:49.000Z" itemprop="datePublished">2026-03-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2026/03/25/day02/">day02</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="80-删除有序数组中的重复项II"><a href="#80-删除有序数组中的重复项II" class="headerlink" title="80.删除有序数组中的重复项II"></a>80.删除有序数组中的重复项II</h2><p><strong>难度</strong></p>
+<p>medium</p>
+<p><strong>题目描述</strong></p>
+<p>给你一个有序数组 <code>nums</code> ，请你**<a target="_blank" rel="noopener" href="http://baike.baidu.com/item/%E5%8E%9F%E5%9C%B0%E7%AE%97%E6%B3%95"> 原地</a>** 删除重复出现的元素，使得出现次数超过两次的元素<strong>只出现两次</strong> ，返回删除后数组的新长度。</p>
+<p>不要使用额外的数组空间，你必须在 <strong><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%8E%9F%E5%9C%B0%E7%AE%97%E6%B3%95">原地 </a>修改输入数组</strong> 并在使用 O(1) 额外空间的条件下完成。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [1,1,1,2,2,3]</span><br><span class="line">输出：5, nums = [1,1,2,2,3]</span><br><span class="line">解释：函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3。 不需要考虑数组中超出新长度后面的元素。</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [0,0,1,1,1,1,2,3,3]</span><br><span class="line">输出：7, nums = [0,0,1,1,2,3,3]</span><br><span class="line">解释：函数应返回新长度 length = 7, 并且原数组的前七个元素被修改为 0, 0, 1, 1, 2, 3, 3。不需要考虑数组中超出新长度后面的元素。</span><br></pre></td></tr></table></figure>
+
+<p> <strong>思想</strong></p>
+<p>同删除有序数组中的重复项I，可以采用双指针的思想。首先考虑边界条件，只有出现次数超过2次的元素才需要被删除至出现两次，所以只需处理数组长度&gt;2的情况，&lt;&#x3D;2直接返回原数组长度即可。移动的时候快指针天然往后顺次移动。只有需要覆盖元素的时候慢指针才移动，这样可以确保最后慢指针扫过的地方所有元素只出现&lt;&#x3D;2次。</p>
+<p><strong>代码</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class Solution:</span><br><span class="line">    def removeDuplicates(self, nums: List[int]) -&gt; int:</span><br><span class="line">        n = len(nums)</span><br><span class="line">        if n&lt;=2:</span><br><span class="line">            return n</span><br><span class="line">        else:</span><br><span class="line">            slow = 2</span><br><span class="line">            fast = 2</span><br><span class="line">            while fast &lt; n:</span><br><span class="line">                #由于每个元素出现的次数不能超过两次，所以要用fast指向的当前元素和slow指向的前两个元素比较（因为赋初值的时候slow=fast，这样slow-2指向的是第一个元素，fast指向第三个元素）</span><br><span class="line">                if nums[fast]!=nums[slow-2]:</span><br><span class="line">                    nums[slow] = nums[fast]</span><br><span class="line">                    slow += 1</span><br><span class="line">                fast += 1</span><br><span class="line">        return slow</span><br></pre></td></tr></table></figure>
+
+<p><strong>复杂度</strong></p>
+<p>时间复杂度：O（n）</p>
+<p>空间复杂度：O（1）</p>
+<h2 id="169-多数元素"><a href="#169-多数元素" class="headerlink" title="169.多数元素"></a>169.多数元素</h2><p><strong>难度</strong></p>
+<p>easy</p>
+<p><strong>题目描述</strong></p>
+<p>给定一个大小为 <code>n</code> 的数组 <code>nums</code> ，返回其中的多数元素。多数元素是指在数组中出现次数 <strong>大于</strong> <code>⌊ n/2 ⌋</code> 的元素。</p>
+<p>你可以假设数组是非空的，并且给定的数组总是存在多数元素。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [3,2,3]</span><br><span class="line">输出：3</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [2,2,1,1,1,2,2]</span><br><span class="line">输出：2</span><br></pre></td></tr></table></figure>
+
+<p><strong>思想</strong></p>
+<p>一.排序：直接对整个数组排序，完事以后返回中间的元素即可</p>
+<p>二.哈希表：直接返回出现次数最多的</p>
+<p><strong>复杂度</strong></p>
+<p>排序：</p>
+<p>​    时间复杂度：O（nlogn）</p>
+<p>​    空间复杂度：O（n）</p>
+<p>哈希表：</p>
+<p>​    时间复杂度：O（n）</p>
+<p>​    空间复杂度：O（n）</p>
+<p><strong>代码</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#排序</span><br><span class="line">class Solution:</span><br><span class="line">    def majorityElement(self, nums: List[int]) -&gt; int:</span><br><span class="line">        nums.sort()</span><br><span class="line">        n = len(nums)</span><br><span class="line">        return nums[n//2]</span><br><span class="line"></span><br><span class="line">#哈希表</span><br><span class="line">class Solution:</span><br><span class="line">    def majorityElement(self, nums: List[int]) -&gt; int:</span><br><span class="line">        hs = collections.Counter(nums)</span><br><span class="line">        return max(counts.keys(), key=counts.get)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="189-轮转数组"><a href="#189-轮转数组" class="headerlink" title="189.轮转数组"></a>189.轮转数组</h2><p><strong>难度</strong></p>
+<p>medium</p>
+<p><strong>题目描述</strong></p>
+<p>给定一个整数数组 <code>nums</code>，将数组中的元素向右轮转 <code>k</code> 个位置，其中 <code>k</code> 是非负数。</p>
+<p><strong>示例 1:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">输入: nums = [1,2,3,4,5,6,7], k = 3</span><br><span class="line">输出: [5,6,7,1,2,3,4]</span><br><span class="line">解释:</span><br><span class="line">向右轮转 1 步: [7,1,2,3,4,5,6]</span><br><span class="line">向右轮转 2 步: [6,7,1,2,3,4,5]</span><br><span class="line">向右轮转 3 步: [5,6,7,1,2,3,4]</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [-1,-100,3,99], k = 2</span><br><span class="line">输出：[3,99,-1,-100]</span><br><span class="line">解释: </span><br><span class="line">向右轮转 1 步: [99,-1,-100,3]</span><br><span class="line">向右轮转 2 步: [3,99,-1,-100]</span><br></pre></td></tr></table></figure>
+
+<p><strong>思想</strong></p>
+<p>一.利用取余的性质。将下表为m的元素右移k次等价于把这个元素移动到下标为(m+k)%n的位置</p>
+<p>二.模板：无论右移还是左移，都相当于把数组翻转3次。右移：整体翻、前m翻，后面翻；左移：前m翻，后面翻，整体翻</p>
+<p><strong>复杂度</strong></p>
+<p>时间复杂度：O（n）</p>
+<p>空间复杂度：O（n）</p>
+<p><strong>代码</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#取余法</span><br><span class="line">class Solution:</span><br><span class="line">    def rotate(self, nums: List[int], k: int) -&gt; None:</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        Do not return anything, modify nums in-place instead.</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        n = len(nums)</span><br><span class="line">        res = [0 for _ in range(n)]</span><br><span class="line">        for i in range(n):</span><br><span class="line">            res[(i+k)%n] = nums[i]</span><br><span class="line">        for i in range(n):</span><br><span class="line">            nums[i] = res[i]</span><br><span class="line">            </span><br><span class="line">#三次翻转法</span><br><span class="line">def rotateRight(nums, m):</span><br><span class="line">    m %= len(nums)</span><br><span class="line">    nums.reverse()</span><br><span class="line">    nums[:m] = reversed(nums[:m])</span><br><span class="line">    nums[m:] = reversed(nums[m:])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def rotateLeft(nums, m):</span><br><span class="line">    m %= len(nums)</span><br><span class="line">    nums[:m] = reversed(nums[:m])</span><br><span class="line">    nums[m:] = reversed(nums[m:])</span><br><span class="line">    nums.reverse()</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2026/03/25/day02/" data-id="cuid8hJFgMoBaEKz3LGI65PlX" data-title="day02" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95-%E5%8A%9B%E6%89%A3%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8150%E9%A2%98/" rel="tag">算法(力扣面试经典150题)</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-day01" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2026/03/24/day01/" class="article-date">
@@ -189,109 +394,7 @@
       
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-day02" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2026/03/24/day02/" class="article-date">
-  <time class="dt-published" datetime="2026-03-24T12:11:49.000Z" itemprop="datePublished">2026-03-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2026/03/24/day02/">day02</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h2 id="80-删除有序数组中的重复项II"><a href="#80-删除有序数组中的重复项II" class="headerlink" title="80.删除有序数组中的重复项II"></a>80.删除有序数组中的重复项II</h2><p><strong>难度</strong></p>
-<p>medium</p>
-<p><strong>题目描述</strong></p>
-<p>给你一个有序数组 <code>nums</code> ，请你**<a target="_blank" rel="noopener" href="http://baike.baidu.com/item/%E5%8E%9F%E5%9C%B0%E7%AE%97%E6%B3%95"> 原地</a>** 删除重复出现的元素，使得出现次数超过两次的元素<strong>只出现两次</strong> ，返回删除后数组的新长度。</p>
-<p>不要使用额外的数组空间，你必须在 <strong><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%8E%9F%E5%9C%B0%E7%AE%97%E6%B3%95">原地 </a>修改输入数组</strong> 并在使用 O(1) 额外空间的条件下完成。</p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [1,1,1,2,2,3]</span><br><span class="line">输出：5, nums = [1,1,2,2,3]</span><br><span class="line">解释：函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3。 不需要考虑数组中超出新长度后面的元素。</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [0,0,1,1,1,1,2,3,3]</span><br><span class="line">输出：7, nums = [0,0,1,1,2,3,3]</span><br><span class="line">解释：函数应返回新长度 length = 7, 并且原数组的前七个元素被修改为 0, 0, 1, 1, 2, 3, 3。不需要考虑数组中超出新长度后面的元素。</span><br></pre></td></tr></table></figure>
-
-<p> <strong>思想</strong></p>
-<p>同删除有序数组中的重复项I，可以采用双指针的思想。首先考虑边界条件，只有出现次数超过2次的元素才需要被删除至出现两次，所以只需处理数组长度&gt;2的情况，&lt;&#x3D;2直接返回原数组长度即可。移动的时候快指针天然往后顺次移动。只有需要覆盖元素的时候慢指针才移动，这样可以确保最后慢指针扫过的地方所有元素只出现&lt;&#x3D;2次。</p>
-<p><strong>代码</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class Solution:</span><br><span class="line">    def removeDuplicates(self, nums: List[int]) -&gt; int:</span><br><span class="line">        n = len(nums)</span><br><span class="line">        if n&lt;=2:</span><br><span class="line">            return n</span><br><span class="line">        else:</span><br><span class="line">            slow = 2</span><br><span class="line">            fast = 2</span><br><span class="line">            while fast &lt; n:</span><br><span class="line">                #由于每个元素出现的次数不能超过两次，所以要用fast指向的当前元素和slow指向的前两个元素比较（因为赋初值的时候slow=fast，这样slow-2指向的是第一个元素，fast指向第三个元素）</span><br><span class="line">                if nums[fast]!=nums[slow-2]:</span><br><span class="line">                    nums[slow] = nums[fast]</span><br><span class="line">                    slow += 1</span><br><span class="line">                fast += 1</span><br><span class="line">        return slow</span><br></pre></td></tr></table></figure>
-
-<p><strong>复杂度</strong></p>
-<p>时间复杂度：O（n）</p>
-<p>空间复杂度：O（1）</p>
-<h2 id="169-多数元素"><a href="#169-多数元素" class="headerlink" title="169.多数元素"></a>169.多数元素</h2><p><strong>难度</strong></p>
-<p>easy</p>
-<p><strong>题目描述</strong></p>
-<p>给定一个大小为 <code>n</code> 的数组 <code>nums</code> ，返回其中的多数元素。多数元素是指在数组中出现次数 <strong>大于</strong> <code>⌊ n/2 ⌋</code> 的元素。</p>
-<p>你可以假设数组是非空的，并且给定的数组总是存在多数元素。</p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [3,2,3]</span><br><span class="line">输出：3</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [2,2,1,1,1,2,2]</span><br><span class="line">输出：2</span><br></pre></td></tr></table></figure>
-
-<p><strong>思想</strong></p>
-<p>一.排序：直接对整个数组排序，完事以后返回中间的元素即可</p>
-<p>二.哈希表：直接返回出现次数最多的</p>
-<p><strong>复杂度</strong></p>
-<p>排序：</p>
-<p>​    时间复杂度：O（nlogn）</p>
-<p>​    空间复杂度：O（n）</p>
-<p>哈希表：</p>
-<p>​    时间复杂度：O（n）</p>
-<p>​    空间复杂度：O（n）</p>
-<p><strong>代码</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#排序</span><br><span class="line">class Solution:</span><br><span class="line">    def majorityElement(self, nums: List[int]) -&gt; int:</span><br><span class="line">        nums.sort()</span><br><span class="line">        n = len(nums)</span><br><span class="line">        return nums[n//2]</span><br><span class="line"></span><br><span class="line">#哈希表</span><br><span class="line">class Solution:</span><br><span class="line">    def majorityElement(self, nums: List[int]) -&gt; int:</span><br><span class="line">        hs = collections.Counter(nums)</span><br><span class="line">        return max(counts.keys(), key=counts.get)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="189-轮转数组"><a href="#189-轮转数组" class="headerlink" title="189.轮转数组"></a>189.轮转数组</h2><p><strong>难度</strong></p>
-<p>medium</p>
-<p><strong>题目描述</strong></p>
-<p>给定一个整数数组 <code>nums</code>，将数组中的元素向右轮转 <code>k</code> 个位置，其中 <code>k</code> 是非负数。</p>
-<p><strong>示例 1:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">输入: nums = [1,2,3,4,5,6,7], k = 3</span><br><span class="line">输出: [5,6,7,1,2,3,4]</span><br><span class="line">解释:</span><br><span class="line">向右轮转 1 步: [7,1,2,3,4,5,6]</span><br><span class="line">向右轮转 2 步: [6,7,1,2,3,4,5]</span><br><span class="line">向右轮转 3 步: [5,6,7,1,2,3,4]</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 2:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [-1,-100,3,99], k = 2</span><br><span class="line">输出：[3,99,-1,-100]</span><br><span class="line">解释: </span><br><span class="line">向右轮转 1 步: [99,-1,-100,3]</span><br><span class="line">向右轮转 2 步: [3,99,-1,-100]</span><br></pre></td></tr></table></figure>
-
-<p><strong>思想</strong></p>
-<p>一.利用取余的性质。将下表为m的元素右移k次等价于把这个元素移动到下标为(m+k)%n的位置</p>
-<p>二.模板：无论右移还是左移，都相当于把数组翻转3次。右移：整体翻、前m翻，后面翻；左移：前m翻，后面翻，整体翻</p>
-<p><strong>复杂度</strong></p>
-<p>时间复杂度：O（n）</p>
-<p>空间复杂度：O（n）</p>
-<p><strong>代码</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#取余法</span><br><span class="line">class Solution:</span><br><span class="line">    def rotate(self, nums: List[int], k: int) -&gt; None:</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        Do not return anything, modify nums in-place instead.</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        n = len(nums)</span><br><span class="line">        res = [0 for _ in range(n)]</span><br><span class="line">        for i in range(n):</span><br><span class="line">            res[(i+k)%n] = nums[i]</span><br><span class="line">        for i in range(n):</span><br><span class="line">            nums[i] = res[i]</span><br><span class="line">            </span><br><span class="line">#三次翻转法</span><br><span class="line">def rotateRight(nums, m):</span><br><span class="line">    m %= len(nums)</span><br><span class="line">    nums.reverse()</span><br><span class="line">    nums[:m] = reversed(nums[:m])</span><br><span class="line">    nums[m:] = reversed(nums[m:])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def rotateLeft(nums, m):</span><br><span class="line">    m %= len(nums)</span><br><span class="line">    nums[:m] = reversed(nums[:m])</span><br><span class="line">    nums[m:] = reversed(nums[m:])</span><br><span class="line">    nums.reverse()</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2026/03/24/day02/" data-id="cuid8hJFgMoBaEKz3LGI65PlX" data-title="day02" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95-%E5%8A%9B%E6%89%A3%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8150%E9%A2%98/" rel="tag">算法(力扣面试经典150题)</a></li></ul>
 
     </footer>
   </div>
@@ -365,7 +468,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95-%E5%8A%9B%E6%89%A3%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8150%E9%A2%98/" rel="tag">算法(力扣面试经典150题)</a></li></ul>
     </div>
   </div>
 
@@ -375,7 +478,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a>
+      <a href="/tags/%E7%AE%97%E6%B3%95-%E5%8A%9B%E6%89%A3%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8150%E9%A2%98/" style="font-size: 10px;">算法(力扣面试经典150题)</a>
     </div>
   </div>
 
@@ -397,11 +500,15 @@
       <ul>
         
           <li>
-            <a href="/2026/03/24/day01/">day01</a>
+            <a href="/2026/03/26/day03/">day03</a>
           </li>
         
           <li>
-            <a href="/2026/03/24/day02/">day02</a>
+            <a href="/2026/03/25/day02/">day02</a>
+          </li>
+        
+          <li>
+            <a href="/2026/03/24/day01/">day01</a>
           </li>
         
           <li>
